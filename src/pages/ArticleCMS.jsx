@@ -12,14 +12,16 @@ export default function ArticleCMS() {
 
   useEffect(() => {
     // Validasi login admin (CMS)
-    const savedUsername = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
-    if (!savedUsername || !savedPassword) {
-      alert("Silakan login terlebih dahulu untuk mengakses CMS!");
-      navigate("/login");
-    } else {
+    useEffect(() => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+      if (isLoggedIn !== "true") {
+        navigate("/login");
+        return;
+      }
+
       fetchArticles();
-    }
+    })
   }, [navigate]);
 
   async function fetchArticles() {
@@ -150,7 +152,7 @@ export default function ArticleCMS() {
 
       <div className="container" style={{ margin: "40px auto", maxWidth: "850px", background: "white", padding: "35px", borderRadius: "20px", boxShadow: "0 5px 15px rgba(0,0,0,0.08)" }}>
         <h1 style={{ textAlign: "center", marginBottom: "30px", color: "#cc3366" }}>Content Management System</h1>
-        
+
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <label style={{ fontWeight: 600 }}>Judul:</label>
           <input
