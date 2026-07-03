@@ -29,23 +29,47 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: "Password tidak boleh kosong" });
     }
 
-    // Lakukan upsert pada profile ID 1 (profile pemilik website)
-    // agar nama dan foto yang di-upload otomatis tampil di homepage
-    const { error } = await supabase
+    // Cek apakah data profil sudah ada di database
+    const { data: existingProfile, error: selectError } = await supabase
       .from("profile")
-      .upsert(
-        {
-          id: 1,
+      .select("id")
+      .limit(1)
+      .maybeSingle();
+
+    if (selectError) {
+      throw selectError;
+    }
+
+    let queryError;
+    if (existingProfile) {
+      // Jika profil sudah ada, update profil tersebut (tanpa mengirimkan kolom ID agar tidak error di PostgreSQL)
+      const { error } = await supabase
+        .from("profile")
+        .update({
           nama: username.trim(),
           foto: photo || null,
           profesi: "Mahasiswa Informatika",
           deskripsi: `Hi, saya ${username.trim()}. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika.`
-        },
-        { onConflict: "id" }
-      );
+        })
+        .eq("id", existingProfile.id);
+      queryError = error;
+    } else {
+      // Jika profil belum ada, insert baris baru tanpa kolom ID (PostgreSQL akan generate otomatis)
+      const { error } = await supabase
+        .from("profile")
+        .insert([
+          {
+            nama: username.trim(),
+            foto: photo || null,
+            profesi: "Mahasiswa Informatika",
+            deskripsi: `Hi, saya ${username.trim()}. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika.`
+          }
+        ]);
+      queryError = error;
+    }
 
-    if (error) {
-      throw error;
+    if (queryError) {
+      throw queryError;
     }
 
     return res.status(200).json({
