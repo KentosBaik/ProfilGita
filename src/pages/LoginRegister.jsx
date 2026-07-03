@@ -143,7 +143,7 @@ export default function LoginRegister() {
   return (
     <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: "linear-gradient(135deg,#ffe4ec,#ffd6e7)" }}>
       <div className="container" style={{ width: "380px", background: "white", padding: "35px", borderRadius: "20px", boxShadow: "0 8px 20px rgba(0,0,0,0.1)" }}>
-        
+
         {isLoginView ? (
           <form id="loginForm" onSubmit={handleLoginSubmit}>
             <h1 style={{ textAlign: "center", color: "#cc3366", marginBottom: "25px" }}>Login</h1>

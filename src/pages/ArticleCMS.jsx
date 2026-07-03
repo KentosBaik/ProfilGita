@@ -11,15 +11,15 @@ export default function ArticleCMS() {
   const [articlesList, setArticlesList] = useState([]);
 
   useEffect(() => {
-    // Validasi login admin (CMS)
     const savedUsername = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
-    if (!savedUsername || !savedPassword) {
+
+    if (!savedUsername) {
       alert("Silakan login terlebih dahulu untuk mengakses CMS!");
       navigate("/login");
-    } else {
-      fetchArticles();
+      return;
     }
+
+    fetchArticles();
   }, [navigate]);
 
   async function fetchArticles() {
