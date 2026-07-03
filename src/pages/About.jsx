@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 export default function About() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     nama: "Gita Wahyuni",
     profesi: "Mahasiswa Informatika",
@@ -10,8 +11,13 @@ export default function About() {
   });
 
   useEffect(() => {
+    const savedUser = localStorage.getItem("username");
+    if (!savedUser) {
+      navigate("/login");
+      return;
+    }
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   async function fetchProfile() {
     try {

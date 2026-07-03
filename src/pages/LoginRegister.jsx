@@ -75,17 +75,16 @@ export default function LoginRegister() {
         localStorage.setItem("userAvatar", photoPayload);
       }
 
-      setRegisterMessage("<span class='success'>Akun berhasil dibuat! Mengalihkan ke login...</span>");
+      setRegisterMessage("<span class='success'>Akun berhasil dibuat! Mengalihkan ke homepage Anda...</span>");
 
       // Reset form
       setRegisterUsername("");
       setRegisterPassword("");
       setPhotoPayload(null);
 
-      // Redirect ke login view setelah 1.5 detik
+      // Redirect ke homepage setelah 1.5 detik
       setTimeout(() => {
-        setIsLoginView(true);
-        setRegisterMessage("");
+        navigate("/");
       }, 1500);
 
     } catch (err) {
@@ -103,7 +102,7 @@ export default function LoginRegister() {
 
     if (loginUsername.trim() === savedUsername && loginPassword.trim() === savedPassword) {
       alert("Login berhasil!");
-      navigate("/article");
+      navigate("/"); // Mengalihkan ke homepage
     } else {
       setLoginMessage("<span class='error'>Username atau password salah!</span>");
     }

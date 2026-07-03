@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 export default function Contact() {
+  const navigate = useNavigate();
   const [contactNamaSimple, setContactNamaSimple] = useState("");
   const [contactEmailSimple, setContactEmailSimple] = useState("");
   const [contactPesanSimple, setContactPesanSimple] = useState("");
@@ -14,6 +15,13 @@ export default function Contact() {
   const [jumlahKaryawan, setJumlahKaryawan] = useState("");
   const [layanan, setLayanan] = useState("");
   const [pertanyaan, setPertanyaan] = useState("");
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("username");
+    if (!savedUser) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   async function handleContactSaya(e) {
     e.preventDefault();

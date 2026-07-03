@@ -29,52 +29,56 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: "Password tidak boleh kosong" });
     }
 
-    // Cek apakah data profil sudah ada di database
-    const { data: existingProfile, error: selectError } = await supabase
-      .from("profile")
-      .select("id")
-      .limit(1)
-      .maybeSingle();
+    // Lakukan update database Supabase HANYA jika username-nya adalah 'gita' (Admin Pemilik Web)
+    const isGitaAdmin = username.trim().toLowerCase() === "gita";
 
-    if (selectError) {
-      throw selectError;
-    }
+    if (isGitaAdmin) {
+      const { data: existingProfile, error: selectError } = await supabase
+        .from("profile")
+        .select("id")
+        .limit(1)
+        .maybeSingle();
 
-    let queryError;
-    if (existingProfile) {
-      // Jika profil sudah ada, update profil tersebut (tanpa mengirimkan kolom ID agar tidak error di PostgreSQL)
-      const { error } = await supabase
-        .from("profile")
-        .update({
-          nama: username.trim(),
-          foto: photo || null,
-          profesi: "Mahasiswa Informatika",
-          deskripsi: `Hi, saya ${username.trim()}. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika.`
-        })
-        .eq("id", existingProfile.id);
-      queryError = error;
-    } else {
-      // Jika profil belum ada, insert baris baru tanpa kolom ID (PostgreSQL akan generate otomatis)
-      const { error } = await supabase
-        .from("profile")
-        .insert([
-          {
+      if (selectError) {
+        throw selectError;
+      }
+
+      let queryError;
+      if (existingProfile) {
+        // Jika profil sudah ada, update profil tersebut (tanpa kolom ID)
+        const { error } = await supabase
+          .from("profile")
+          .update({
             nama: username.trim(),
-            foto: photo || null,
-            profesi: "Mahasiswa Informatika",
-            deskripsi: `Hi, saya ${username.trim()}. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika.`
-          }
-        ]);
-      queryError = error;
-    }
+            foto: photo || null
+          })
+          .eq("id", existingProfile.id);
+        queryError = error;
+      } else {
+        // Jika profil belum ada, insert baris baru tanpa kolom ID
+        const { error } = await supabase
+          .from("profile")
+          .insert([
+            {
+              nama: username.trim(),
+              foto: photo || null,
+              profesi: "Mahasiswa Informatika",
+              deskripsi: "Hi, saya Gita Wahyuni. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika."
+            }
+          ]);
+        queryError = error;
+      }
 
-    if (queryError) {
-      throw queryError;
+      if (queryError) {
+        throw queryError;
+      }
     }
 
     return res.status(200).json({
       success: true,
-      message: "Akun berhasil dibuat! Profil pemilik website otomatis ter-update di homepage."
+      message: isGitaAdmin 
+        ? "Registrasi Admin berhasil! Profil otomatis ter-update di database."
+        : "Registrasi User berhasil! Selamat datang di platform portofolio Gita."
     });
   } catch (err) {
     console.error("Gagal registrasi profile:", err);

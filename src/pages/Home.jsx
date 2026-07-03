@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     nama: "Gita Wahyuni",
     profesi: "Mahasiswa Informatika",
     deskripsi: "Hi, saya Gita Wahyuni. Saya berusia 19 tahun dan berasal dari Cilacap. Saat ini saya sedang menempuh pendidikan di Universitas Nahdlatul Ulama Al-Ghazali Cilacap prodi Informatika.",
     foto: "images/fotogita.jpeg"
   });
+  const [profileName, setProfileName] = useState("");
+  const [profileFoto, setProfileFoto] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState("");
   const [projects, setProjects] = useState([]);
   const [articles, setArticles] = useState([]);
   const [mapUrl, setMapUrl] = useState("");
@@ -37,12 +41,29 @@ export default function Home() {
   let currentSubscription = null;
 
   useEffect(() => {
+    const savedUser = localStorage.getItem("username");
+    if (!savedUser) {
+      navigate("/login");
+      return;
+    }
+    setLoggedInUser(savedUser);
+
     fetchProfile();
     fetchProjects();
     fetchArticles();
     initPushNotification();
     tampilkanLokasiDanKirimPush();
-  }, []);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (loggedInUser && loggedInUser.toLowerCase() !== "gita") {
+      setProfileName(loggedInUser);
+      setProfileFoto(localStorage.getItem("userAvatar") || "images/fotogita.jpeg");
+    } else {
+      setProfileName(profile.nama);
+      setProfileFoto(profile.foto || "images/fotogita.jpeg");
+    }
+  }, [profile, loggedInUser]);
 
   async function fetchProfile() {
     try {
@@ -336,11 +357,18 @@ export default function Home() {
 
       <div className="section" id="Portfolio">
         <div className="text">
-          <h1 id="nama">I'm {profile.nama}</h1>
-          <p id="profile-desc">{profile.deskripsi}</p>
+          <p style={{ color: "#cc3366", fontSize: "14px", fontWeight: "bold", marginBottom: "5px" }}>
+            Platform Portofolio dibuat oleh Gita Wahyuni
+          </p>
+          <h1 id="nama">I'm {profileName}</h1>
+          <p id="profile-desc">
+            {loggedInUser && loggedInUser.toLowerCase() !== "gita"
+              ? `Selamat datang di halaman portofolio ${profileName}! Halaman ini dibuat menggunakan platform portofolio karya Gita Wahyuni.`
+              : profile.deskripsi}
+          </p>
         </div>
         <div className="image">
-          <img src={profile.foto || "images/fotogita.jpeg"} id="profile-img" alt={`Foto ${profile.nama}`} />
+          <img src={profileFoto} id="profile-img" alt={`Foto ${profileName}`} />
         </div>
       </div>
 
