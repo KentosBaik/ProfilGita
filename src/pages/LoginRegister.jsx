@@ -68,11 +68,29 @@ export default function LoginRegister() {
         throw new Error(result.error || "Gagal melakukan pendaftaran.");
       }
 
-      // Simpan credentials ke localStorage untuk autentikasi client-side CMS
+      // Simpan credentials ke database lokal (localStorage) agar tidak hilang saat logout
+      let registeredUsers = {};
+      try {
+        const stored = localStorage.getItem("registeredUsers");
+        if (stored) registeredUsers = JSON.parse(stored);
+      } catch (e) {
+        registeredUsers = {};
+      }
+
+      registeredUsers[registerUsername.trim().toLowerCase()] = {
+        username: registerUsername.trim(),
+        password: registerPassword.trim(),
+        avatar: photoPayload
+      };
+
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+
+      // Simpan sesi aktif saat ini
       localStorage.setItem("username", registerUsername.trim());
-      localStorage.setItem("password", registerPassword.trim());
       if (photoPayload) {
         localStorage.setItem("userAvatar", photoPayload);
+      } else {
+        localStorage.removeItem("userAvatar");
       }
 
       setRegisterMessage("<span class='success'>Akun berhasil dibuat! Mengalihkan ke homepage Anda...</span>");
@@ -97,11 +115,25 @@ export default function LoginRegister() {
     e.preventDefault();
     setLoginMessage("");
 
-    const savedUsername = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
+    let registeredUsers = {};
+    try {
+      const stored = localStorage.getItem("registeredUsers");
+      if (stored) registeredUsers = JSON.parse(stored);
+    } catch (e) {
+      registeredUsers = {};
+    }
 
-    if (loginUsername.trim() === savedUsername && loginPassword.trim() === savedPassword) {
+    const matchedUser = registeredUsers[loginUsername.trim().toLowerCase()];
+
+    if (matchedUser && matchedUser.password === loginPassword.trim()) {
       alert("Login berhasil!");
+      // Set sesi aktif saat ini
+      localStorage.setItem("username", matchedUser.username);
+      if (matchedUser.avatar) {
+        localStorage.setItem("userAvatar", matchedUser.avatar);
+      } else {
+        localStorage.removeItem("userAvatar");
+      }
       navigate("/"); // Mengalihkan ke homepage
     } else {
       setLoginMessage("<span class='error'>Username atau password salah!</span>");

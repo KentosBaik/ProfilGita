@@ -120,7 +120,7 @@ export default function Header() {
               </li>
             </>
           ) : (
-            <li><Link to="/login">Login Admin</Link></li>
+            <li><Link to="/login">Login</Link></li>
           )}
         </ul>
       </nav>
