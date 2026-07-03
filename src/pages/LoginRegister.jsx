@@ -71,6 +71,9 @@ export default function LoginRegister() {
       // Simpan credentials ke localStorage untuk autentikasi client-side CMS
       localStorage.setItem("username", registerUsername.trim());
       localStorage.setItem("password", registerPassword.trim());
+      if (photoPayload) {
+        localStorage.setItem("userAvatar", photoPayload);
+      }
 
       setRegisterMessage("<span class='success'>Akun berhasil dibuat! Mengalihkan ke login...</span>");
 

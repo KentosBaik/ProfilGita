@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function Home() {
   const [profile, setProfile] = useState({
@@ -331,25 +332,7 @@ export default function Home() {
 
   return (
     <div>
-      <header className="header">
-        <div className="logo">
-          <h1>Gita<span>Portfolio</span></h1>
-        </div>
-        <nav className="navbar">
-          <ul>
-            <li><a href="#Portfolio">Home</a></li>
-            <li><a href="#tentang">Tentang</a></li>
-            <li><a href="#hobi">Hobi</a></li>
-            <li><a href="#Goals">Goals</a></li>
-            <li><a href="#Favorit">Favourite</a></li>
-            <li><a href="#projects-section">Project</a></li>
-            <li><a href="#notifikasi">Notifikasi</a></li>
-            <li><a href="#lokasi">Lokasi</a></li>
-            <li><a href="#contact">Kontak</a></li>
-            <li><Link to="/login">Artikel</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       <div className="section" id="Portfolio">
         <div className="text">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function About() {
   const [profile, setProfile] = useState({
@@ -26,22 +27,7 @@ export default function About() {
 
   return (
     <div>
-      <header className="header">
-        <div className="logo">
-          <h1>Gita<span>Portfolio</span></h1>
-        </div>
-        <nav className="navbar">
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><a href="#tentang">Tentang</a></li>
-            <li><a href="#hobi">Hobi</a></li>
-            <li><a href="#Goals">Goals</a></li>
-            <li><a href="#Favorit">Favourite</a></li>
-            <li><Link to="/contact">Kontak</Link></li>
-            <li><Link to="/login">Artikel</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       <div className="section" id="tentang">
         <h2>Tentang Saya</h2>

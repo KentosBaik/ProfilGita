@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function Contact() {
   const [contactNamaSimple, setContactNamaSimple] = useState("");
@@ -74,22 +75,7 @@ export default function Contact() {
 
   return (
     <div>
-      <header className="header">
-        <div className="logo">
-          <h1>Gita<span>Portfolio</span></h1>
-        </div>
-        <nav className="navbar">
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">Tentang</Link></li>
-            <li><Link to="/about#hobi">Hobi</Link></li>
-            <li><Link to="/about#Goals">Goals</Link></li>
-            <li><Link to="/about#Favorit">Favourite</Link></li>
-            <li><a href="#contact">Kontak</a></li>
-            <li><Link to="/login">Artikel</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       <div className="section" id="Kontak">
         <h2>Hubungi Saya</h2>

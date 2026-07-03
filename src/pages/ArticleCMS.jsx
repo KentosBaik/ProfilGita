@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function ArticleCMS() {
   const navigate = useNavigate();
@@ -145,22 +146,7 @@ export default function ArticleCMS() {
 
   return (
     <div>
-      <header className="header">
-        <div className="logo">
-          <h1>Gita<span>Portfolio</span></h1>
-        </div>
-        <nav className="navbar">
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">Tentang</Link></li>
-            <li><Link to="/about#hobi">Hobi</Link></li>
-            <li><Link to="/about#Goals">Goals</Link></li>
-            <li><Link to="/about#Favorit">Favourite</Link></li>
-            <li><Link to="/contact">Kontak</Link></li>
-            <li><Link to="/article">Artikel</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       <div className="container" style={{ margin: "40px auto", maxWidth: "850px", background: "white", padding: "35px", borderRadius: "20px", boxShadow: "0 5px 15px rgba(0,0,0,0.08)" }}>
         <h1 style={{ textAlign: "center", marginBottom: "30px", color: "#cc3366" }}>Content Management System</h1>
