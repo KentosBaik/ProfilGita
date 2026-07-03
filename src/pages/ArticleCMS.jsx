@@ -12,16 +12,14 @@ export default function ArticleCMS() {
 
   useEffect(() => {
     // Validasi login admin (CMS)
-    useEffect(() => {
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-      if (isLoggedIn !== "true") {
-        navigate("/login");
-        return;
-      }
-
+    const savedUsername = localStorage.getItem("username");
+    const savedPassword = localStorage.getItem("password");
+    if (!savedUsername || !savedPassword) {
+      alert("Silakan login terlebih dahulu untuk mengakses CMS!");
+      navigate("/login");
+    } else {
       fetchArticles();
-    })
+    }
   }, [navigate]);
 
   async function fetchArticles() {
