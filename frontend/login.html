@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#ffe4ec,#ffd6e7);
+        }
+
+        .container{
+            width:380px;
+            background:white;
+            padding:35px;
+            border-radius:20px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            text-align:center;
+            color:#cc3366;
+            margin-bottom:25px;
+        }
+
+        .input-box{
+            margin-bottom:15px;
+        }
+
+        .input-box input{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            outline:none;
+        }
+
+        .input-box input:focus{
+            border-color:#ff69b4;
+            box-shadow:0 0 5px rgba(255,105,180,0.4);
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:10px;
+            background:#cc3366;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#a82b55;
+        }
+
+        .switch{
+            text-align:center;
+            margin-top:15px;
+        }
+
+        .switch a{
+            color:#cc3366;
+            text-decoration:none;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        .error{
+            text-align:center;
+            color:red;
+            margin-top:10px;
+        }
+
+        .success{
+            text-align:center;
+            color:green;
+            margin-top:10px;
+        }
+
+        #registerForm{
+            display:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form id="loginForm">
+        <h1>Login</h1>
+
+        <div class="input-box">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" id="loginPassword" placeholder="Password" required>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <p class="switch">
+            Belum punya akun?
+            <a onclick="showRegister()">Daftar</a>
+        </p>
+
+        <p id="loginMessage"></p>
+    </form>
+
+    <form id="registerForm">
+        <h1>Daftar Akun</h1>
+
+        <div class="input-box">
+            <input type="text" id="registerUsername" placeholder="Buat Username" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" id="registerPassword" placeholder="Buat Password" required>
+        </div>
+
+        <button type="submit">Daftar</button>
+
+        <p class="switch">
+            Sudah punya akun?
+            <a onclick="showLogin()">Login</a>
+        </p>
+
+        <p id="registerMessage"></p>
+    </form>
+
+</div>
+
+<script>
+
+    function showLogin(){
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+    }
+    function showRegister(){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    }
+    document.getElementById("registerForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const username = document.getElementById("registerUsername").value;
+        const password = document.getElementById("registerPassword").value;
+
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+
+        document.getElementById("registerMessage").innerHTML =
+        "<span class='success'>Akun berhasil dibuat!</span>";
+
+        setTimeout(() => {
+            showLogin();
+        }, 5000);
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const savedUsername = localStorage.getItem("username");
+        const savedPassword = localStorage.getItem("password");
+
+        if(username === savedUsername && password === savedPassword){
+            alert("Login berhasil!");
+            window.location.href = "artikel.html";
+        }else{
+            document.getElementById("loginMessage").innerHTML =
+            "<span class='error'>Username atau password salah!</span>";
+            
+        }
+    });
+
+</script>
+
+</body>
+</html>
